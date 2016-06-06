@@ -1,9 +1,6 @@
 <?php
 require_once("Database.php");
 
-//page information
-$page_title = "Manage Feeds";
-
 //database connection information
 $hostname = "localhost";
 $dbname = "feed_widget";
@@ -15,9 +12,14 @@ $timeout = 60;
 //instantiate the database
 $db = new Database($hostname, $dbname, $username, $password, $timeout);
 
-//get the feeds
-$feeds = $db->fetchFeeds();
-$num_feeds = $db->getNumFeeds();
+if (!empty($_GET["feed_id"])) {
+    $feed_id = $_GET["feed_id"];
 
-//html file for the page
-require_once("html/manage_feeds.html.php");
+    //remove it from the database
+    $db->removeFeed($feed_id);
+}
+
+//redirect back to manage
+header("Location: manage_feeds.php");
+exit;
+?>
