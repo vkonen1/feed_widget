@@ -5,10 +5,13 @@ class Article {
     var $pub_date;
     var $timestamp;
 
+    var $content;
+
     function Article($article_xml) {
         $this->title = $article_xml->title;
         $this->url = $article_xml->link;
         $this->pub_date = $article_xml->pubDate;
+        //generate the unix timestamp from the article pubDate
         $this->getTimestamp();
     }
 
@@ -26,21 +29,38 @@ class Article {
 
         $this->timestamp = mktime($hour, $min, $second, $month, $day, $year);
 
-        if(is_numeric($timezone)) {
+        if (is_numeric($timezone)) {
             $hours_mod = $mins_mod = 0;
+
             $modifier = substr($timezone, 0, 1);
-            if($modifier == "+"){ $modifier = "-"; } else
-            if($modifier == "-"){ $modifier = "+"; }
-            $hours_mod = (int) substr($timezone, 1, 2);
-            $mins_mod = (int) substr($timezone, 3, 2);
+            if ($modifier == "+") {
+                $modifier = "-";
+            } else if ($modifier == "-") {
+                $modifier = "+";
+            }
+
+            $hours_mod = (int)substr($timezone, 1, 2);
+            $mins_mod = (int)substr($timezone, 3, 2);
             $hour_label = $hours_mod>1 ? 'hours' : 'hour';
             $strtotimearg = $modifier.$hours_mod.' '.$hour_label;
-            if($mins_mod) {
-                $mins_label = $mins_mod>1 ? 'minutes' : 'minute';
-                $strtotimearg .= ' '.$mins_mod.' '.$mins_label;
+            if ($mins_mod) {
+                $mins_label = $mins_mod > 1 ? 'minutes' : 'minute';
+                $strtotimearg .= ' ' . $mins_mod . ' ' . $mins_label;
             }
             $this->timestamp = strtotime($strtotimearg, $this->timestamp);
         }
+    }
+
+    function getImage() {
+        $timeout = 5;
+
+        //curl for the article content
+        $crl = curl_init();
+        curl_setopt($crl, CURLOPT_URL, $this->url);
+        curl_setopt($crl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($crl, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $this->content = curl_exec($crl);
+        curl_close($crl);
     }
 }
 ?>

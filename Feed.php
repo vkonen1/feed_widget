@@ -1,4 +1,6 @@
 <?php
+require_once("Article.php");
+
 class Feed {
     var $url;
     var $content;
@@ -8,7 +10,9 @@ class Feed {
 
     function Feed($url) {
         $this->url = $url;
+        //gets the content for the rss feed and converts to xml
         $this->getFeedContent();
+        //grab the articles from the feed
         $this->getArticles();
     }
 
