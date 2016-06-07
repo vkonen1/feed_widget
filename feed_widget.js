@@ -1,4 +1,4 @@
-var cached_file_url = "http://localhost/feed_widget/html/feed_widget.html";
+var cached_file_url = "http://datahole.ddns.net/feed_widget/html/feed_widget.html";
 var xml_http = null;
 
 function getArticleHTML() {
