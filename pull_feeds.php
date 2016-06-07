@@ -21,6 +21,8 @@ $db = new Database($config['db_hostname'], $config['db_dbname'], $config['db_use
 $feeds = $db->fetchFeeds();
 $num_feeds = $db->getNumFeeds();
 
+echo "Ignore read error notices (normal functionality)<br /><br />";
+
 //build the Feed objects from the rss feed urls
 $feed_objects = array();
 foreach ($feeds as $feed) {
