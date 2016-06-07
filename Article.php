@@ -14,6 +14,8 @@ class Article {
     var $id;
     var $image_type;
 
+    var $local_image_url;
+
     function Article($article_xml) {
         $this->title = $article_xml->title;
         $this->url = $article_xml->link;
@@ -135,6 +137,10 @@ class Article {
         $image->writeImage('images/'.$this->id.'.'.$this->image_type);
         $image->destroy();
 
+        //establish the absolute url for the image on the server
+        $this->local_image_url = "http://" . $_SERVER['SERVER_NAME'] . "/feed_widget/images/" . $this->id . "." . $this->image_type;
+
+        //print the title and chosen image for debug purposes
         echo $this->title . "<br />";
         echo $this->image_url . "<br /><br />";
     }

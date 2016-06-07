@@ -71,4 +71,30 @@ for ($i = 0; $i < $num_articles; $i++) {
     $articles[$i]->getImage();
 }
 
-//var_dump($articles[0]->images);
+//now we build the cached file
+$cached_file_contents = '<div id="feed_widget">';
+for ($i = 0; $i < $num_articles; $i++) {
+    $cached_file_contents .= '<div class="feed_widget_article">';
+
+    //need the image linking to the article
+    $cached_file_contents .= '<a href="' . $articles[$i]->url . '" target="_blank">';
+    $cached_file_contents .= '<img src="' . $articles[$i]->local_image_url . '" height="250" width="250" />';
+    $cached_file_contents .= '</a>';
+
+    //need the title linking to the article
+    $cached_file_contents .= '<a href="' . $articles[$i]->url . '" target="_blank">';
+    $cached_file_contents .= '<p class="feed_widget_article_title">' . $articles[$i]->title . '</p>';
+    $cached_file_contents .= '</a>';
+
+    $cached_file_contents .= '</div>';
+}
+$cached_file_contents .= '</div>';
+
+//add the style
+$cached_file_style = file_get_contents("css/feed_widget.css");
+$cached_file_contents = '<style>' . $cached_file_style . '</style>' . $cached_file_contents;
+
+//generate the cached file
+file_put_contents("html/feed_widget.html", $cached_file_contents);
+echo "Cached file generated.";
+?>
