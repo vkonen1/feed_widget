@@ -30,12 +30,15 @@ foreach ($feeds as $feed) {
 //generate the array of articles from all of the feeds ordered by timestamp desc
 $articles = array();
 foreach ($feed_objects as $feed_object) {
+    if (!$feed_object->valid) {
+        continue;
+    }
     foreach ($feed_object->articles as $article_object) {
         $inserted = false;
         for ($i = 0; $i < count($articles); $i++) {
             //insert this article into the array at this position
             if ($article_object->timestamp > $articles[$i]->timestamp) {
-                array_splice($articles, $i, 0, $article_object);
+                array_splice($articles, $i, 0, array($article_object));
                 $inserted = true;
                 break;
             }
@@ -47,6 +50,7 @@ foreach ($feed_objects as $feed_object) {
         }
     }
 }
+
 
 //debug code to ensure the articles are in the correct order
 /*
@@ -78,13 +82,12 @@ for ($i = 0; $i < $num_articles; $i++) {
 
     //need the image linking to the article
     $cached_file_contents .= '<a href="' . $articles[$i]->url . '" target="_blank">';
-    $cached_file_contents .= '<img src="' . $articles[$i]->local_image_url . '" height="250" width="250" />';
+    $cached_file_contents .= '<img src="' . $articles[$i]->local_image_url . '" />';
     $cached_file_contents .= '</a>';
 
     //need the title linking to the article
-    $cached_file_contents .= '<a href="' . $articles[$i]->url . '" target="_blank">';
-    $cached_file_contents .= '<p class="feed_widget_article_title">' . $articles[$i]->title . '</p>';
-    $cached_file_contents .= '</a>';
+    $cached_file_contents .= '<p class="feed_widget_article_title">';
+    $cached_file_contents .= '<a href="' . $articles[$i]->url . '" target="_blank">' . $articles[$i]->title . '</a></p>';
 
     $cached_file_contents .= '</div>';
 }

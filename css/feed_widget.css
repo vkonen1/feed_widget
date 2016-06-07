@@ -1,0 +1,38 @@
+#feed_widget a {
+    color: #314580;
+    text-decoration: none;
+}
+#feed_widget a:visited {
+    color: #314580;
+}
+#feed_widget a:focus {
+    outline: 0;
+}
+
+#feed_widget {
+    max-width: 1100px;
+    position: relative;
+    margin: auto;
+}
+
+#feed_widget > .feed_widget_article {
+    height: 225px;
+    width: 250px;
+    float: left;
+
+    margin: 5px 10px;
+
+    text-align: center;
+}
+
+#feed_widget > .feed_widget_article img {
+    height: 150px;
+    width: 250px;
+}
+
+#feed_widget > .feed_widget_article .feed_widget_article_title {
+    text-align: left;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-size: 14px;
+}

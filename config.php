@@ -7,4 +7,3 @@ $config['db_password'] = "feedwidgetpass";
 $config['db_timeout'] = 60;
 
 $config['num_articles'] = 8;
-$config['articles_per_row'] = 4;

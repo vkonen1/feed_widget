@@ -133,7 +133,7 @@ class Article {
 
         //resize the image
         $image = new Imagick('images/'.$this->id.'.'.$this->image_type);
-        $image->resizeImage(250, 250, Imagick::FILTER_LANCZOS, 1);
+        $image->resizeImage(250, 175, Imagick::FILTER_LANCZOS, 1);
         $image->writeImage('images/'.$this->id.'.'.$this->image_type);
         $image->destroy();
 
@@ -142,6 +142,7 @@ class Article {
 
         //print the title and chosen image for debug purposes
         echo $this->title . "<br />";
+        echo $this->pub_date . "<br />";
         echo $this->image_url . "<br /><br />";
     }
 

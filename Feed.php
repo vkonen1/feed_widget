@@ -8,6 +8,8 @@ class Feed {
 
     var $articles;
 
+    var $valid;
+
     function Feed($url) {
         $this->url = $url;
         //gets the content for the rss feed and converts to xml
@@ -27,14 +29,22 @@ class Feed {
         $this->content = curl_exec($crl);
         curl_close($crl);
 
-        //convert to xml
-        $this->xml = new SimpleXmlElement($this->content);
+        if (empty($this->content)) {
+            $this->valid = false;
+        } else {
+            //convert to xml
+            $this->xml = new SimpleXmlElement($this->content);
+            $this->valid = true;
+        }
     }
 
     function getArticles() {
-        $this->articles = array();
-        foreach ($this->xml->channel->item as $article) {
-            array_push($this->articles, new Article($article));
+        if ($this->valid) {
+            $this->articles = array();
+            foreach ($this->xml->channel->item as $article) {
+                $article_object = new Article($article);
+                array_push($this->articles, $article_object);
+            }            
         }
     }
 }
