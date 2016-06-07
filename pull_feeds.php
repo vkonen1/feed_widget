@@ -55,9 +55,19 @@ foreach ($articles as $article) {
 }
 */
 
+//clean out the images directory
+$images = glob("images/*");
+foreach ($images as $image) {
+    if (is_file($image)) {
+        unlink($image);
+    }
+}
+
 //need to pull images for the number of articles desired
 $num_articles = $config['num_articles'];
 for ($i = 0; $i < $num_articles; $i++) {
+    //set the article position for the cached file and get the image for it
+    $articles[$i]->setId($i);
     $articles[$i]->getImage();
 }
 

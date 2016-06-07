@@ -2,6 +2,7 @@
 class Article {
     var $title;
     var $url;
+    var $host;
     var $pub_date;
     var $timestamp;
 
@@ -10,9 +11,14 @@ class Article {
     var $image_url;
     var $image_dim;
 
+    var $id;
+    var $image_type;
+
     function Article($article_xml) {
         $this->title = $article_xml->title;
         $this->url = $article_xml->link;
+        $parsed_url = parse_url($this->url);
+        $this->host = $parsed_url['host'];
         $this->pub_date = $article_xml->pubDate;
         //generate the unix timestamp from the article pubDate
         $this->getTimestamp();
@@ -54,7 +60,7 @@ class Article {
         }
     }
 
-    //gets the biggest image in the article
+    //gets the biggest image in the article and stores it on the server in the images dir
     function getImage() {
         $timeout = 5;
 
@@ -74,11 +80,19 @@ class Article {
         //get the img tags
         $images = $dom->getElementsByTagName('img');
 
+        //find the largest image
         $this->image_dim = 0;
         foreach ($images as $article_image) {
             //clean the url
             $image_url = $article_image->getAttribute('src');
-            if (strpos($image_url, "http") !== 0) {
+
+            //not an absolute path to the image
+            if (strpos($image_url, "//") !== 0 && strpos($image_url, "http") !== 0) {
+                $image_url = "http://" . $this->host . $image_url;
+            }
+
+            //need to add the protocol
+            if (strpos($image_url, "//") === 0) {
                 $image_url = "http:" . $image_url;
             }
 
@@ -97,8 +111,36 @@ class Article {
             }
         }
 
+        //store that image
+        $split_url = explode(".", $this->image_url);
+        $this->image_type = $split_url[count($split_url) - 1];
+
+        //default to png
+        if ($this->image_type != "jpg" && $this->image_type != "png" && $this->image_type != "gif") {
+            $this->image_type = "png";
+        }
+
+        //save the image
+        $ch = curl_init($this->image_url);
+        $fp = fopen('images/'.$this->id.'.'.$this->image_type, 'wb');
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        //resize the image
+        $image = new Imagick('images/'.$this->id.'.'.$this->image_type);
+        $image->resizeImage(250, 250, Imagick::FILTER_LANCZOS, 1);
+        $image->writeImage('images/'.$this->id.'.'.$this->image_type);
+        $image->destroy();
+
         echo $this->title . "<br />";
         echo $this->image_url . "<br /><br />";
+    }
+
+    function setId($id) {
+        $this->id = $id;
     }
 }
 ?>
