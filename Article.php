@@ -7,6 +7,9 @@ class Article {
 
     var $content;
 
+    var $image_url;
+    var $image_dim;
+
     function Article($article_xml) {
         $this->title = $article_xml->title;
         $this->url = $article_xml->link;
@@ -51,6 +54,7 @@ class Article {
         }
     }
 
+    //gets the biggest image in the article
     function getImage() {
         $timeout = 5;
 
@@ -61,6 +65,40 @@ class Article {
         curl_setopt($crl, CURLOPT_CONNECTTIMEOUT, $timeout);
         $this->content = curl_exec($crl);
         curl_close($crl);
+
+        $dom = new DOMDocument();
+        //ignore the parsing errors
+        libxml_use_internal_errors(true);
+        //parse the html
+        $dom->loadHTML($this->content);
+        //get the img tags
+        $images = $dom->getElementsByTagName('img');
+
+        $this->image_dim = 0;
+        foreach ($images as $article_image) {
+            //clean the url
+            $image_url = $article_image->getAttribute('src');
+            if (strpos($image_url, "http") !== 0) {
+                $image_url = "http:" . $image_url;
+            }
+
+            //check if its a valid image
+            if (exif_imagetype($image_url)) {
+                //get the images size
+                $image_size = getimagesize($image_url);
+                $image_width = $image_size[0];
+                $image_height = $image_size[1];
+
+                //check if this image is biggest
+                if ($image_width * $image_height > $this->image_dim) {
+                    $this->image_url = $image_url;
+                    $this->image_dim = $image_width * $image_height;
+                }
+            }
+        }
+
+        echo $this->title . "<br />";
+        echo $this->image_url . "<br /><br />";
     }
 }
 ?>

@@ -1,4 +1,15 @@
 <?php
+/*
+This script should be run as a CRON job as follows
+0 0 * * * php /var/www/feed_widget/pull_feeds.php
+
+Queries for all rss feeds enetered in the database
+Pulls the content for all of those feeds
+Generates an array of articles sorted by timestamp from the pool of feeds
+Grabs the images from the first $config['num_articles'] articles specified in the config.php file
+Stores these images on the server in the images relative path directory
+
+*/
 require_once("config.php");
 require_once("Database.php");
 require_once("Feed.php");
@@ -49,3 +60,5 @@ $num_articles = $config['num_articles'];
 for ($i = 0; $i < $num_articles; $i++) {
     $articles[$i]->getImage();
 }
+
+//var_dump($articles[0]->images);
