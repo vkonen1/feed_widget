@@ -7,18 +7,11 @@ function test_input($data) {
     return $data;
 }
 
+require_once("config.php");
 require_once("Database.php");
 
-//database connection information
-$hostname = "localhost";
-$dbname = "feed_widget";
-$username = "feedwidgetaccount";
-$password = "feedwidgetpass";
-//seconds to attempt database connection
-$timeout = 60;
-
 //instantiate the database
-$db = new Database($hostname, $dbname, $username, $password, $timeout);
+$db = new Database($config['db_hostname'], $config['db_dbname'], $config['db_username'], $config['db_password'], $config['db_timeout']);
 
 if (!empty($_POST['feed_url'])) {
     //clean it up
