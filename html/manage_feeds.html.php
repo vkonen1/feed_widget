@@ -6,6 +6,7 @@
 </head>
 <body>
     <h1><?php echo $page_title; ?></h1>
+    <p>Please ensure the absolute path to the rss feed is provided.</p>
     <form action="add_feed.php" method="post">
         <input type="text" name="feed_url" />
         <input type="submit" value="Add Feed" />
