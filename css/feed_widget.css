@@ -26,6 +26,7 @@
 }
 
 #feed_widget > .feed_widget_article img {
+    background-color: white;
     max-height: 150px;
     max-width: 250px;
 }

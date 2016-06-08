@@ -15,7 +15,8 @@ class Article {
     var $image_type;
 
     var $local_image_url;
-    var $image_padding;
+    var $image_padding_tb;
+    var $image_padding_lr;
 
     function Article($article_xml) {
         $this->title = $article_xml->title;
@@ -140,9 +141,14 @@ class Article {
         //get the geometry and determine necessary padding
         $image_geometry = $image->getImageGeometry();
         if ($image_geometry['height'] < 150) {
-            $this->image_padding = (150 - $image_geometry['height']) / 2;
+            $this->image_padding_tb = (150 - $image_geometry['height']) / 2;
         } else {
-            $this->image_padding = 0;
+            $this->image_padding_tb = 0;
+        }
+        if ($image_geometry['width'] < 250) {
+            $this->image_padding_lr = (250 - $image_geometry['width']) / 2;
+        } else {
+            $this->image_padding_lr = 0;
         }
 
         //clean up

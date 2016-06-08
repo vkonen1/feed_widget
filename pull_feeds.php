@@ -87,7 +87,7 @@ for ($i = 0; $i < $num_articles; $i++) {
 
     //need the image linking to the article
     $cached_file_contents .= '<a href="' . $articles[$i]->url . '" target="_blank">';
-    $cached_file_contents .= '<img src="' . $articles[$i]->local_image_url . '" style="padding: ' . $articles[$i]->image_padding . 'px 0;" />';
+    $cached_file_contents .= '<img src="' . $articles[$i]->local_image_url . '" style="padding: ' . $articles[$i]->image_padding_tb . 'px ' . $articles[$i]->image_padding_lr . 'px;" />';
     $cached_file_contents .= '</a>';
 
     //need the title linking to the article
