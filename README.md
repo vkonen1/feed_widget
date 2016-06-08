@@ -1,5 +1,7 @@
 # feed_widget
 
+All files must be placed on server root in a directory named (feed_widget)
+
 feed_widget.js
 Contains the javascript to pull the cached file and display it to the div with
 id feed_widget_container
