@@ -26,6 +26,7 @@
 }
 
 #feed_widget .feed_widget_image {
+    background-color: white;
     height: 150px;
     width: 250px;
     overflow: hidden;
