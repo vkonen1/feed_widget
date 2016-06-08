@@ -15,6 +15,7 @@ class Article {
     var $image_type;
 
     var $local_image_url;
+    var $image_padding;
 
     function Article($article_xml) {
         $this->title = $article_xml->title;
@@ -133,8 +134,18 @@ class Article {
 
         //resize the image
         $image = new Imagick('images/'.$this->id.'.'.$this->image_type);
-        $image->resizeImage(250, 175, Imagick::FILTER_LANCZOS, 1);
+        $image->resizeImage(250, 150, Imagick::FILTER_LANCZOS, 1, TRUE);
         $image->writeImage('images/'.$this->id.'.'.$this->image_type);
+
+        //get the geometry and determine necessary padding
+        $image_geometry = $image->getImageGeometry();
+        if ($image_geometry['height'] < 150) {
+            $this->image_padding = (150 - $image_geometry['height']) / 2;
+        } else {
+            $this->image_padding = 0;
+        }
+
+        //clean up
         $image->destroy();
 
         //establish the absolute url for the image on the server

@@ -26,8 +26,8 @@
 }
 
 #feed_widget > .feed_widget_article img {
-    height: 150px;
-    width: 250px;
+    max-height: 150px;
+    max-width: 250px;
 }
 
 #feed_widget > .feed_widget_article .feed_widget_article_title {
