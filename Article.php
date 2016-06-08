@@ -135,17 +135,20 @@ class Article {
         $image = new Imagick('images/'.$this->id.'.'.$this->image_type);
         //get the geometry and scale accordingly
         $image_geometry = $image->getImageGeometry();
+        //scale proportionally to the minimum dimension first
         if ($image_geometry['height'] < 150) {
             $image->resizeImage(0, 150, Imagick::FILTER_LANCZOS, 1);
         } else if ($image_geometry['width'] < 250) {
             $image->resizeImage(250, 0, Imagick::FILTER_LANCZOS, 1);
         } else {
+            // scale to the lesser dimension
             if ($image_geometry['height'] > $image_geometry['width']) {
                 $image->resizeImage(250, 0, Imagick::FILTER_LANCZOS, 1);                
             } else {
                 $image->resizeImage(0, 150, Imagick::FILTER_LANCZOS, 1);                
             }
 
+            //rescale if needed to fill the space
             $image_geometry = $image->getImageGeometry();
             if ($image_geometry['height'] < 150) {
                 $image->resizeImage(0, 150, Imagick::FILTER_LANCZOS, 1);
@@ -153,8 +156,7 @@ class Article {
                 $image->resizeImage(250, 0, Imagick::FILTER_LANCZOS, 1);
             }
         }
-
-
+        //save the image
         $image->writeImage('images/'.$this->id.'.'.$this->image_type);
         //clean up
         $image->destroy();
