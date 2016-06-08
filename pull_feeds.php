@@ -77,6 +77,9 @@ for ($i = 0; $i < $num_articles; $i++) {
     $articles[$i]->getImage();
 }
 
+//remove the old cached file
+unlink("html/feed_widget.html");
+
 //now we build the cached file
 $cached_file_contents = '<div id="feed_widget">';
 for ($i = 0; $i < $num_articles; $i++) {
