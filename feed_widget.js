@@ -1,3 +1,4 @@
+//need to change this url to match your server
 var cached_file_url = "http://datahole.ddns.net/feed_widget/html/feed_widget.html";
 var xml_http = null;
 
