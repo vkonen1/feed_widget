@@ -15,8 +15,6 @@ class Article {
     var $image_type;
 
     var $local_image_url;
-    var $image_padding_tb;
-    var $image_padding_lr;
 
     function Article($article_xml) {
         $this->title = $article_xml->title;
@@ -135,22 +133,29 @@ class Article {
 
         //resize the image
         $image = new Imagick('images/'.$this->id.'.'.$this->image_type);
-        $image->resizeImage(250, 150, Imagick::FILTER_LANCZOS, 1, TRUE);
-        $image->writeImage('images/'.$this->id.'.'.$this->image_type);
-
-        //get the geometry and determine necessary padding
+        //get the geometry and scale accordingly
         $image_geometry = $image->getImageGeometry();
         if ($image_geometry['height'] < 150) {
-            $this->image_padding_tb = (150 - $image_geometry['height']) / 2;
+            $image->resizeImage(0, 150, Imagick::FILTER_LANCZOS, 1);
+        } else if ($image_geometry['width'] < 250) {
+            $image->resizeImage(250, 0, Imagick::FILTER_LANCZOS, 1);
         } else {
-            $this->image_padding_tb = 0;
-        }
-        if ($image_geometry['width'] < 250) {
-            $this->image_padding_lr = (250 - $image_geometry['width']) / 2;
-        } else {
-            $this->image_padding_lr = 0;
+            if ($image_geometry['height'] > $image_geometry['width']) {
+                $image->resizeImage(250, 0, Imagick::FILTER_LANCZOS, 1);                
+            } else {
+                $image->resizeImage(0, 150, Imagick::FILTER_LANCZOS, 1);                
+            }
+
+            $image_geometry = $image->getImageGeometry();
+            if ($image_geometry['height'] < 150) {
+                $image->resizeImage(0, 150, Imagick::FILTER_LANCZOS, 1);
+            } else if ($image_geometry['width'] < 250) {
+                $image->resizeImage(250, 0, Imagick::FILTER_LANCZOS, 1);
+            }
         }
 
+
+        $image->writeImage('images/'.$this->id.'.'.$this->image_type);
         //clean up
         $image->destroy();
 

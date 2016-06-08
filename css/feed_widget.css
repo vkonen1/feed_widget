@@ -25,10 +25,10 @@
     text-align: center;
 }
 
-#feed_widget > .feed_widget_article img {
-    background-color: white;
-    max-height: 150px;
-    max-width: 250px;
+#feed_widget .feed_widget_image {
+    height: 150px;
+    width: 250px;
+    overflow: hidden;
 }
 
 #feed_widget > .feed_widget_article .feed_widget_article_title {
